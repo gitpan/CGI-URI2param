@@ -30,15 +30,19 @@ Now you can access the values like this:
  my $id=$r->param('id');
  my $style=$r->param('style');
 
+If you are using mod_perl, please take a look at Apache::URI2param.
+It provides an Apache PerlInitHandler to make running CGI::URI2param
+easier for you. Apache::URI2param is distributed along with
+CGI::URI2param.
+
 INSTALLATION
 
 the standard way:
 
  perl Makefile.pl
  make
+ make test
  make install
-
-Currently there are no tests available.
 
 AUTHOR
 
@@ -46,8 +50,10 @@ Thomas Klausner, domm@zsi.at
 
 COPYRIGHT
 
-Apache::FakeEnv is Copyright (c) 2001 Thomas Klausner, ZSI.
+CGI::URI2param is Copyright (c) 2001,2002 Thomas Klausner, ZSI.
 All rights reserved.
 
 You may use and distribute this module according to the same terms
 that Perl is distributed under
+
+

@@ -1,20 +1,42 @@
-# Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl test.pl'
+#!/usr/bin/perl -w
+# finally, my first test script!
+package Fake::Request;
 
-######################### We start with some black magic to print on failure.
+use Test::Simple tests=>4;
+use CGI::URI2param qw(uri2param);
 
-# Change 1..1 below to 1..last_test_to_print .
-# (It may become useful if the test is moved to ./t subdirectory.)
+# make fake object
+my $r=bless {},Fake::Request;
 
-BEGIN { $| = 1; print "1..1\n"; }
-END {print "not ok 1\n" unless $loaded;}
-use CGI::URI2param;
-$loaded = 1;
-print "ok 1\n";
+# prepare regexes
+my $regex={
+	   style=>'style_(plain|fancy)',
+	   id=>'id(\d+)',
+};
 
-######################### End of black magic.
+# tests!
+ok ($r->can('param'),'   create fake test object');
+ok (uri2param($r,$regex),'   apply regexes');
+ok ($r->param('style') eq "plain",'   param style');
+ok ($r->param('id') eq "1234",'   param id');
 
-# Insert your test code below (better if it prints "ok 13"
-# (correspondingly "not ok 13") depending on the success of chunk 13
-# of the test code):
+print "
+Apache::URI2param not tested, because mod_perl testing is a pain
+in the ass. But if the tests above where successfull, it should work\n\n";
+
+sub param {
+   my ($self,$key,$val)=@_;
+   $val ? 
+      return $self->{$key}=$val :
+	 return $self->{$key};
+}
+
+sub url {
+   return "/somewhere/style_plain/";
+}
+
+sub path_info {
+   return "id1234.html";
+}
+
 

@@ -3,8 +3,8 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
     'NAME'	=> 'CGI::URI2param',
-    'VERSION_FROM' => 'URI2param.pm', # finds $VERSION
+    'VERSION_FROM' => 'lib/CGI/URI2param.pm', # finds $VERSION
     'AUTHOR'       => 'Thomas Klausner <domm@zsi.at>',
-    'ABSTRACT_FROM'  => 'URI2param.pm',
+    'ABSTRACT_FROM'  => 'lib/CGI/URI2param.pm',
 
 );

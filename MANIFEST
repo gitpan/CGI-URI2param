@@ -1,6 +1,7 @@
 Changes
 MANIFEST
 Makefile.PL
-URI2param.pm
-test.pl
 README
+lib/Apache/URI2param.pm
+lib/CGI/URI2param.pm
+test.pl

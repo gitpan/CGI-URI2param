@@ -1,15 +1,15 @@
 #-----------------------------------------------------------------
 # CGI::URI2param
 #-----------------------------------------------------------------
-# Copyright Thomas Klausner / ZSI 2001
+# Copyright Thomas Klausner / ZSI 2001,2002
 # You may use and distribute this module according to the same terms
 # that Perl is distributed under.
 #
 # Thomas Klausner domm@zsi.at http://domm.zsi.at
 #
 # $Author: domm $
-# $Date: 2001/07/04 09:40:15 $
-# $Revision: 1.3 $
+# $Date: 2002/01/07 15:36:26 $
+# $Revision: 1.1 $
 #-----------------------------------------------------------------
 # CGI::URI2param - convert parts of an URL to param values
 #-----------------------------------------------------------------
@@ -18,13 +18,13 @@ package CGI::URI2param;
 use strict;
 use Carp;
 use Exporter;
-use vars qw(@ISA @EXPORT_OK); 
+use vars qw(@ISA @EXPORT_OK);
 
 @ISA = qw(Exporter);
 
-@EXPORT_OK   = qw(uri2param);   
+@EXPORT_OK   = qw(uri2param);
 
-$CGI::URI2param::VERSION = '0.02';
+$CGI::URI2param::VERSION = '1.00';
 
 sub uri2param {
    my ($req,$regexs,$options)=@_;
@@ -54,12 +54,12 @@ sub uri2param {
    };
 
    if ($@) {
-      $@=~s/ at .*$//;
-      croak "CGI::URI2param: $@" if $@;
+#      $@=~s/ at .*$//;
+#      croak "CGI::URI2param: $@" if $@;
+      croak $@;
    }
-   return;
+   return 1;
 }
-
 
 1;
 
@@ -105,6 +105,11 @@ Now you can access the values like this:
  my $id=$r->param('id');
  my $style=$r->param('style');
 
+If you are using mod_perl, please take a look at L<Apache::URI2param>.
+It provides an Apache PerlInitHandler to make running CGI::URI2param
+easier for you. Apache::URI2param is distributed along with
+CGI::URI2param.
+
 =head2 uri2param($req,\%regexs)
 
 C<$req> has to be some sort of request object that supports the method
@@ -115,17 +120,17 @@ C<\%regexs> is hash containing the names of the parameters as the
 keys, and corresponding regular expressions, that will be applied to
 the URL, as the values.
 
-   %regexs=( 
+   %regexs=(
             id    => 'id(\d+)\.html',
             style => 'st_(fancy|plain)',
-            order => 'by_(\w+)' 
+            order => 'by_(\w+)',
            );
 
 You should add some capturing parentheses to the regular
 expression. If you don't do, all the buzz would be rather useless.
 
-uri2param won't get exported into your namespace by default, so have
-to either import it explicitly
+uri2param won't get exported into your namespace by default, so you
+have to either import it explicitly
 
  use CGI::URI2param qw(uri2param);
 
@@ -148,13 +153,12 @@ the standard way:
 
  perl Makefile.pl
  make
+ make test
  make install
 
-Currently there are no tests available.
- 
 =head1 BUGS
 
-I assume, but I did't find any ...
+None so far.
 
 =head1 TODO
 
@@ -166,13 +170,20 @@ matched)
 A module that supplies some sort of request object is needed, e.g.:
 Apache::Request, CGI
 
+=head1 SEE ALSO
+
+L<Apache::URI2param>
+
 =head1 AUTHOR
 
 Thomas Klausner, domm@zsi.at, http://domm.zsi.at
 
+Thanks Darren Chamberlain <dlc@users.sourceforge.net> for the idea
+to write a mod_perl handler for CGI::URI2param
+
 =head1 COPYRIGHT
 
-Apache::FakeEnv is Copyright (c) 2001 Thomas Klausner, ZSI.
+CGI::URI2param is Copyright (c) 2001 Thomas Klausner, ZSI.
 All rights reserved.
 
 You may use and distribute this module according to the same terms
