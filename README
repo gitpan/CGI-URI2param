@@ -1,0 +1,53 @@
+CGI::URI2param - convert parts of an URL to param values
+
+DESCRIPTION
+
+CGI::URI2param takes a request object (as supplied by CGI.pm or
+Apache::Request) and a hashref of keywords mapped to
+regular expressions. It applies all of the regexes to the current URI
+and adds everything that matched to the 'param' list of the request
+object.
+
+Why?
+
+With CGI::URI2param you can instead of:
+
+ http://somehost.org/db?id=1234&style=fancy
+
+present a nicerlooking URL like this:
+
+ http://somehost.org/db/style_fancy/id1234.html
+
+To achieve this, simply do:
+
+ CGI::URI2param::uri2param($r,{
+                                style => 'style_(\w+)',
+                                id    => 'id(\d+)\.html'
+                               });
+
+Now you can access the values like this:
+
+ my $id=$r->param('id');
+ my $style=$r->param('style');
+
+INSTALLATION
+
+the standard way:
+
+ perl Makefile.pl
+ make
+ make install
+
+Currently there are no tests available.
+
+AUTHOR
+
+Thomas Klausner, domm@zsi.at
+
+COPYRIGHT
+
+Apache::FakeEnv is Copyright (c) 2001 Thomas Klausner, ZSI.
+All rights reserved.
+
+You may use and distribute this module according to the same terms
+that Perl is distributed under
