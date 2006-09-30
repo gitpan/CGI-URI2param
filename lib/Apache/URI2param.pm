@@ -1,18 +1,14 @@
 #-----------------------------------------------------------------
-# Apache::URI2param
+# Apache::URI2param - PerlInitHandler to use with CGI::URI2param
 #-----------------------------------------------------------------
-# Copyright Thomas Klausner / ZSI 2002
+# Copyright Thomas Klausner / ZSI 2002,2006
 # You may use and distribute this module according to the same terms
 # that Perl is distributed under.
 #
 # Thomas Klausner domm@zsi.at http://domm.zsi.at
 #
-# $Author: domm $
-# $Date: 2002/01/07 15:28:31 $
-# $Revision: 1.1 $
 #-----------------------------------------------------------------
-# Apache::URI2param - PerlInitHandler to use with CGI::URI2param
-#-----------------------------------------------------------------
+
 package Apache::URI2param;
 
 use strict;
@@ -20,24 +16,24 @@ use Carp;
 use Apache::Request 0.33 ();
 use CGI::URI2param qw(uri2param);
 
-$Apache::URI2param::VERSION = '1.00';
+$Apache::URI2param::VERSION = '1.01';
 
 sub handler {
-   my $r=Apache::Request->instance(shift);
-   my @configs = $r->dir_config->get('URI2param_regex');
-   my %regexs;
-   my %used_keys;
+    my $r=Apache::Request->instance(shift);
+    my @configs = $r->dir_config->get('URI2param_regex');
+    my %regexs;
+    my %used_keys;
 
-   foreach (@configs) {
-      /(\w+)\s+(.*)/;
-      next if $used_keys{$1};
-      $regexs{$1}=$2;
-      $used_keys{$1}++;
-   }
+    foreach (@configs) {
+        /(\w+)\s+(.*)/;
+        next if $used_keys{$1};
+        $regexs{$1}=$2;
+        $used_keys{$1}++;
+    }
 
-   uri2param($r,\%regexs);
+    uri2param($r,\%regexs);
 
-   return $Apache::Constants::OK;
+    return $Apache::Constants::OK;
 }
 
 1;
@@ -60,7 +56,6 @@ in your httpd.conf
      PerlAddVar URI2param_regex "id news(\d+)"
   </Location>
 
-
   <Location /somewhere/else>
      PerlAddVar URI2param_regex "id article(\d+)"
   </Location>
@@ -81,7 +76,7 @@ You should start your own handlers with:
     ...
 
 i.e., use the new feature of Apache::request, C<instance> to use a
-singelton Apache Request object
+singelton Apache Request object.
 
 =head2 CONFIGURATION
 
@@ -101,9 +96,9 @@ If you look at the example given in L<SYNOPSIS>, if you'd request the URI
 C</somewhere/else/style_fancy/article123.html> you would get the following
 parameters:
 
- print $r->param('style') # fancy
- print $r->param('id')    # 123
- print $r->param('sort')  # undef
+    print $r->param('style') # fancy
+    print $r->param('id')    # 123
+    print $r->param('sort')  # undef
 
 As you can see here, you can use the "style" regex defined for C</somewhere>,
 but the "id" definition in C</somewhere/else> overrides the one in
@@ -122,10 +117,6 @@ passes the hash to L<CGI::URI2param::uri2param> for processing there.
 
 Apache::URI2param gets installed along with CGI::URI2param
 
-=head1 BUGS
-
-None so far.
-
 =head1 REQUIRES
 
 Apache::Request (0.33)
@@ -141,13 +132,12 @@ Thomas Klausner, domm@zsi.at, http://domm.zsi.at
 Thanks Darren Chamberlain <dlc@users.sourceforge.net> for the idea
 to write a mod_perl handler for CGI::URI2param
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT & LICENSE
 
-Apache::URI2param is Copyright (c) 2002 Thomas Klausner, ZSI.
-All rights reserved.
+Copyright 2002, 2006 Thomas Klausner, All Rights Reserved.
 
-You may use and distribute this module according to the same terms
-that Perl is distributed under
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
 
 =cut
 

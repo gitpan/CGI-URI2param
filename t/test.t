@@ -20,10 +20,6 @@ ok (uri2param($r,$regex),'   apply regexes');
 ok ($r->param('style') eq "plain",'   param style');
 ok ($r->param('id') eq "1234",'   param id');
 
-print "
-Apache::URI2param not tested, because mod_perl testing is a pain
-in the ass. But if the tests above where successfull, it should work\n\n";
-
 sub param {
    my ($self,$key,$val)=@_;
    $val ? 

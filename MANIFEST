@@ -1,7 +1,12 @@
+Build.PL
 Changes
-MANIFEST
-Makefile.PL
-README
 lib/Apache/URI2param.pm
 lib/CGI/URI2param.pm
-test.pl
+Makefile.PL
+MANIFEST
+META.yml
+README
+t/00_load.t
+t/99_pod.t
+t/99_pod_coverage.t
+t/test.t

@@ -1,18 +1,14 @@
 #-----------------------------------------------------------------
-# CGI::URI2param
+# CGI::URI2param - convert parts of an URL to param values
 #-----------------------------------------------------------------
-# Copyright Thomas Klausner / ZSI 2001,2002
+# Copyright Thomas Klausner / ZSI 2001,2002,2006
 # You may use and distribute this module according to the same terms
 # that Perl is distributed under.
 #
-# Thomas Klausner domm@zsi.at http://domm.zsi.at
+# Thomas Klausner domm@cpan.org http://domm.plix.at
 #
-# $Author: domm $
-# $Date: 2002/01/07 15:36:26 $
-# $Revision: 1.1 $
 #-----------------------------------------------------------------
-# CGI::URI2param - convert parts of an URL to param values
-#-----------------------------------------------------------------
+
 package CGI::URI2param;
 
 use strict;
@@ -24,40 +20,37 @@ use vars qw(@ISA @EXPORT_OK);
 
 @EXPORT_OK   = qw(uri2param);
 
-$CGI::URI2param::VERSION = '1.00';
+$CGI::URI2param::VERSION = '1.01';
 
 sub uri2param {
-   my ($req,$regexs,$options)=@_;
+    my ($req,$regexs,$options)=@_;
 
-# options not implemented, possible options are:
-# -> don't safe in $q->param but return parsed stuff as hash/array
-# -> use URI instead of PATH_INFO
+    # options not implemented, possible options are:
+    # -> don't safe in $q->param but return parsed stuff as hash/array
+    # -> use URI instead of PATH_INFO
 
-   # check if $req seems to be a valid request object
-   croak "CGI::URI2param: not a valid request object" unless $req->can('param');
+    # check if $req seems to be a valid request object
+    croak "CGI::URI2param: not a valid request object" unless $req->can('param');
 
-  # check environment and set stuff
-   my $uri;
-   if ($ENV{MOD_PERL}) {
-      $uri=$req->uri;
-   } else {
-      $uri=$req->url . $req->path_info;
-   }
+    # check environment and set stuff
+    my $uri;
+    if ($ENV{MOD_PERL}) {
+        $uri=$req->uri;
+    } else {
+        $uri=$req->url . $req->path_info;
+    }
 
-   # apply regexes
-   eval{
-      while(my($key,$regex)=each(%$regexs)) {
-	 if ($uri=~m/$regex/) {
-	    $req->param($key,$+);
-	 }
-      }
+    # apply regexes
+    eval {
+        while(my($key,$regex)=each(%$regexs)) {
+            if ($uri=~m/$regex/) {
+                $req->param($key,$+);
+            }
+        }
    };
 
-   if ($@) {
-#      $@=~s/ at .*$//;
-#      croak "CGI::URI2param: $@" if $@;
-      croak $@;
-   }
+   croak $@ if ($@);
+   
    return 1;
 }
 
@@ -149,16 +142,19 @@ possibly faster. See mod_rewrite in the Apache Docs
 
 =head1 INSTALLATION
 
-the standard way:
-
- perl Makefile.pl
- make
- make test
- make install
+ perl Build.PL
+ ./Build
+ ./Build test
+ sudo ./Build install
 
 =head1 BUGS
 
 None so far.
+
+Please report any bugs or feature requests to
+C<bug-cgi-uri2param@rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org>.  I will be notified, and then you'll automatically
+be notified of progress on your bug as I make changes.
 
 =head1 TODO
 
@@ -176,18 +172,17 @@ L<Apache::URI2param>
 
 =head1 AUTHOR
 
-Thomas Klausner, domm@zsi.at, http://domm.zsi.at
+Thomas Klausner, domm@cpan.org, http://domm.plix.at
 
 Thanks Darren Chamberlain <dlc@users.sourceforge.net> for the idea
 to write a mod_perl handler for CGI::URI2param
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT & LICENSE
 
-CGI::URI2param is Copyright (c) 2001 Thomas Klausner, ZSI.
-All rights reserved.
+Copyright 2001, 2002, 2006 Thomas Klausner, All Rights Reserved.
 
-You may use and distribute this module according to the same terms
-that Perl is distributed under
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
 
 =cut
 
